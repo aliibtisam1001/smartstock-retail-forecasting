@@ -1,0 +1,24 @@
+
+---
+
+# .gitignore
+
+Create a file named **`.gitignore`** in the main project folder and paste this:
+
+```gitignore
+venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.DS_Store
+Thumbs.db
+
+data/raw/
+*.tmp
+*.log
+
+# Jupyter
+*.ipynb_checkpoints
+
+# Power BI temp/autosave
+*.pbix.autosave
