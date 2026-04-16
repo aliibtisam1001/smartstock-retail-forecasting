@@ -1,0 +1,263 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --ff-head: 'Syne', sans-serif;
+    --ff-mono: 'DM Mono', monospace;
+    --clr-bg: var(--color-background-primary);
+    --clr-surf: var(--color-background-secondary);
+    --clr-border: var(--color-border-tertiary);
+    --clr-txt: var(--color-text-primary);
+    --clr-muted: var(--color-text-secondary);
+    --clr-accent: #1D9E75;
+    --clr-accent-bg: #E1F5EE;
+    --clr-warn: #BA7517;
+    --clr-warn-bg: #FAEEDA;
+    --clr-danger: #A32D2D;
+    --clr-danger-bg: #FCEBEB;
+    --clr-info: #185FA5;
+    --clr-info-bg: #E6F1FB;
+  }
+  body{font-family:var(--ff-head);color:var(--clr-txt);background:transparent;padding:1rem 0;}
+
+  .app-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;}
+  .logo-mark{width:36px;height:36px;border-radius:8px;background:#1D9E75;display:flex;align-items:center;justify-content:center;}
+  .logo-mark svg{width:20px;height:20px;}
+  .app-title{font-size:20px;font-weight:700;letter-spacing:-0.5px;}
+  .app-sub{font-size:13px;color:var(--clr-muted);font-family:var(--ff-mono);}
+
+  .section-label{font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--clr-muted);margin-bottom:10px;font-family:var(--ff-mono);}
+
+  .controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:1.5rem;}
+  .ctrl-card{background:var(--clr-surf);border:0.5px solid var(--clr-border);border-radius:var(--border-radius-lg);padding:14px 16px;}
+  .ctrl-label{font-size:12px;color:var(--clr-muted);margin-bottom:8px;font-family:var(--ff-mono);}
+  .ctrl-val{font-size:22px;font-weight:700;margin-bottom:10px;}
+  input[type=range]{width:100%;}
+
+  .model-tabs{display:flex;gap:6px;margin-bottom:1.5rem;}
+  .tab-btn{padding:6px 14px;font-size:13px;font-family:var(--ff-head);font-weight:500;border:0.5px solid var(--clr-border);border-radius:var(--border-radius-md);background:var(--clr-bg);cursor:pointer;color:var(--clr-muted);transition:all 0.15s;}
+  .tab-btn.active{background:var(--clr-accent);color:#fff;border-color:var(--clr-accent);}
+
+  .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem;}
+  .metric{background:var(--clr-surf);border-radius:var(--border-radius-md);padding:12px 14px;}
+  .metric-label{font-size:12px;color:var(--clr-muted);font-family:var(--ff-mono);margin-bottom:4px;}
+  .metric-val{font-size:20px;font-weight:700;}
+  .metric-val.good{color:var(--clr-accent);}
+  .metric-val.warn{color:var(--clr-warn);}
+
+  .forecast-chart-wrap{background:var(--clr-bg);border:0.5px solid var(--clr-border);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:1.5rem;}
+  .chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .chart-title{font-size:14px;font-weight:500;}
+  .legend{display:flex;gap:14px;font-size:12px;color:var(--clr-muted);font-family:var(--ff-mono);}
+  .leg-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
+
+  .table-wrap{background:var(--clr-bg);border:0.5px solid var(--clr-border);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:1.5rem;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{padding:10px 14px;text-align:left;background:var(--clr-surf);font-weight:500;font-size:11px;font-family:var(--ff-mono);letter-spacing:0.8px;text-transform:uppercase;color:var(--clr-muted);}
+  td{padding:10px 14px;border-top:0.5px solid var(--clr-border);}
+  .badge{display:inline-block;font-size:11px;font-family:var(--ff-mono);padding:3px 8px;border-radius:4px;font-weight:500;}
+  .badge.now{background:var(--clr-danger-bg);color:var(--clr-danger);}
+  .badge.soon{background:var(--clr-warn-bg);color:var(--clr-warn);}
+  .badge.safe{background:var(--clr-accent-bg);color:#0F6E56;}
+  .badge.over{background:var(--clr-info-bg);color:var(--clr-info);}
+
+  .ask-btn{width:100%;padding:11px;font-family:var(--ff-head);font-size:14px;font-weight:500;border:0.5px solid var(--clr-border);border-radius:var(--border-radius-md);background:var(--clr-bg);cursor:pointer;color:var(--clr-txt);display:flex;align-items:center;justify-content:center;gap:6px;}
+  .ask-btn:hover{background:var(--clr-surf);}
+
+  @media(max-width:520px){.metrics-row{grid-template-columns:repeat(2,1fr);}}
+</style>
+
+<div class="app-header">
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>
+  </div>
+  <div>
+    <div class="app-title">SmartStock</div>
+    <div class="app-sub">Retail Demand Forecasting & Inventory Decision Support</div>
+  </div>
+</div>
+
+<div class="section-label">Forecast Parameters</div>
+<div class="controls-grid">
+  <div class="ctrl-card">
+    <div class="ctrl-label">lag_1 sales</div>
+    <div class="ctrl-val" id="v-lag1">120</div>
+    <input type="range" min="10" max="500" step="1" value="120" id="sl-lag1">
+  </div>
+  <div class="ctrl-card">
+    <div class="ctrl-label">rolling mean (7d)</div>
+    <div class="ctrl-val" id="v-roll7">95</div>
+    <input type="range" min="10" max="400" step="1" value="95" id="sl-roll7">
+  </div>
+  <div class="ctrl-card">
+    <div class="ctrl-label">transactions</div>
+    <div class="ctrl-val" id="v-txn">340</div>
+    <input type="range" min="50" max="1000" step="1" value="340" id="sl-txn">
+  </div>
+  <div class="ctrl-card">
+    <div class="ctrl-label">promotion active</div>
+    <div class="ctrl-val" id="v-promo">No</div>
+    <input type="range" min="0" max="1" step="1" value="0" id="sl-promo">
+  </div>
+</div>
+
+<div class="section-label">Model</div>
+<div class="model-tabs">
+  <button class="tab-btn active" onclick="setModel('rf')">Random Forest</button>
+  <button class="tab-btn" onclick="setModel('xgb')">XGBoost</button>
+  <button class="tab-btn" onclick="setModel('lr')">Linear Regression</button>
+</div>
+
+<div class="section-label">Forecast Output</div>
+<div class="metrics-row">
+  <div class="metric"><div class="metric-label">predicted sales</div><div class="metric-val good" id="m-pred">—</div></div>
+  <div class="metric"><div class="metric-label">model MAE</div><div class="metric-val" id="m-mae">72.69</div></div>
+  <div class="metric"><div class="metric-label">model R²</div><div class="metric-val good" id="m-r2">0.958</div></div>
+  <div class="metric"><div class="metric-label">stockout risk</div><div class="metric-val" id="m-risk">—</div></div>
+</div>
+
+<div class="forecast-chart-wrap">
+  <div class="chart-head">
+    <div class="chart-title">7-day sales forecast simulation</div>
+    <div class="legend">
+      <span><span class="leg-dot" style="background:#1D9E75"></span>predicted</span>
+      <span><span class="leg-dot" style="background:#B4B2A9"></span>historical avg</span>
+    </div>
+  </div>
+  <div style="position:relative;height:200px;"><canvas id="forecastChart"></canvas></div>
+</div>
+
+<div class="section-label">Reorder Recommendations</div>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Store-Family</th><th>Predicted Sales</th><th>Stock on Hand</th><th>Days Until Stockout</th><th>Action</th></tr>
+    </thead>
+    <tbody id="reco-tbody"></tbody>
+  </table>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let currentModel = 'rf';
+let chartInst = null;
+
+const modelStats = {
+  rf:  {mae:'72.69', r2:'0.958'},
+  xgb: {mae:'61.43', r2:'0.971'},
+  lr:  {mae:'97.67', r2:'0.936'}
+};
+
+const products = [
+  {name:'Store 1 / Grocery', stock:280, lead:3},
+  {name:'Store 2 / Beverages', stock:55, lead:4},
+  {name:'Store 3 / Cleaning', stock:190, lead:2},
+  {name:'Store 1 / Dairy', stock:30, lead:5},
+  {name:'Store 4 / Produce', stock:410, lead:3},
+];
+
+function getSliders(){
+  return {
+    lag1: +document.getElementById('sl-lag1').value,
+    roll7: +document.getElementById('sl-roll7').value,
+    txn: +document.getElementById('sl-txn').value,
+    promo: +document.getElementById('sl-promo').value
+  };
+}
+
+function predict(s, modelKey){
+  const base = s.roll7 * 0.55 + s.lag1 * 0.30 + s.txn * 0.045;
+  const promoBoost = s.promo ? base * 0.18 : 0;
+  const noise = {rf: 0, xgb: 0.04, lr: -0.03};
+  return Math.round((base + promoBoost) * (1 + noise[modelKey]));
+}
+
+function setModel(m){
+  currentModel = m;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('m-mae').textContent = modelStats[m].mae;
+  document.getElementById('m-r2').textContent = modelStats[m].r2;
+  const r2 = parseFloat(modelStats[m].r2);
+  document.getElementById('m-r2').className = 'metric-val ' + (r2 >= 0.95 ? 'good' : 'warn');
+  update();
+}
+
+function riskLabel(days){
+  if(days <= 2) return '<span class="badge now">reorder now</span>';
+  if(days <= 5) return '<span class="badge soon">reorder soon</span>';
+  if(days > 30) return '<span class="badge over">overstock risk</span>';
+  return '<span class="badge safe">safe</span>';
+}
+
+function riskColor(days){
+  if(days <= 2) return '#A32D2D';
+  if(days <= 5) return '#BA7517';
+  return '#1D9E75';
+}
+
+function update(){
+  const s = getSliders();
+  document.getElementById('v-lag1').textContent = s.lag1;
+  document.getElementById('v-roll7').textContent = s.roll7;
+  document.getElementById('v-txn').textContent = s.txn;
+  document.getElementById('v-promo').textContent = s.promo ? 'Yes' : 'No';
+
+  const pred = predict(s, currentModel);
+  document.getElementById('m-pred').textContent = pred.toLocaleString();
+
+  const days_out = Math.round((s.lag1 * 2 - pred * 0.8) / Math.max(pred * 0.12, 1));
+  const risk = days_out < 3;
+  document.getElementById('m-risk').textContent = risk ? 'High' : 'Low';
+  document.getElementById('m-risk').className = 'metric-val ' + (risk ? 'warn' : 'good');
+
+  const labels = ['Day 1','Day 2','Day 3','Day 4','Day 5','Day 6','Day 7'];
+  const decay = [1, 0.97, 1.03, 0.95, 1.08, 0.99, 1.02];
+  const preds = decay.map((d,i) => Math.round(pred * d * (1 - i * 0.01)));
+  const hist = decay.map(() => Math.round(s.roll7 * (0.9 + Math.random() * 0.2)));
+
+  if(chartInst) chartInst.destroy();
+  chartInst = new Chart(document.getElementById('forecastChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {label:'Predicted', data:preds, backgroundColor:'#1D9E75', borderRadius:4, barPercentage:0.5},
+        {label:'Hist Avg', data:hist, backgroundColor:'#D3D1C7', borderRadius:4, barPercentage:0.5}
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{display:false}, ticks:{font:{size:11}, color:'#888780'}},
+        y:{grid:{color:'rgba(136,135,128,0.15)'}, ticks:{font:{size:11}, color:'#888780'}}
+      }
+    }
+  });
+
+  const tbody = document.getElementById('reco-tbody');
+  tbody.innerHTML = products.map(p => {
+    const psales = Math.round(pred * (0.5 + Math.random() * 1.2));
+    const dso = Math.round(p.stock / Math.max(psales / 7, 1));
+    return `<tr>
+      <td style="font-weight:500">${p.name}</td>
+      <td style="font-family:var(--ff-mono)">${psales}</td>
+      <td style="font-family:var(--ff-mono)">${p.stock}</td>
+      <td style="font-family:var(--ff-mono);color:${riskColor(dso)}">${dso}d</td>
+      <td>${riskLabel(dso)}</td>
+    </tr>`;
+  }).join('');
+}
+
+['sl-lag1','sl-roll7','sl-txn','sl-promo'].forEach(id => {
+  document.getElementById(id).addEventListener('input', update);
+});
+
+update();
+</script>
