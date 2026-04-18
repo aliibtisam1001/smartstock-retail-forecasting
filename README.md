@@ -3,6 +3,9 @@
 ## Dataset Link
 Kaggle dataset: [Store Sales - Time Series Forecasting](https://www.kaggle.com/competitions/store-sales-time-series-forecasting) 
 
+## Dashboard Link
+(https://aliibtisam1001.github.io/smartstock-retail-forecasting/Dashboard/)
+
 ## Overview
 SmartStock is an end-to-end retail analytics project designed to help small and medium retailers make better inventory decisions. The system combines demand forecasting, stockout-risk analysis, and reorder recommendation logic using historical retail sales data.
 
